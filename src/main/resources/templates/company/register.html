@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p th:text="${msg}" style="color:red;"></p>
+<form th:action="@{/company/register}">
+    <p><input type="submit">
+    <p>用户名：<input type="text" name="companyName" ></p>
+    <p>邮箱：<input type="text" name="companyEmail" ></p>
+    <p>密码： <input type="text" name="companyPassword" ></p>
+    </p>
+</form>
+</body>
+</html>

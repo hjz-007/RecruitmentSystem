@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hjz.dao.RecruitmentInfoMapper">
+    <resultMap id="RecruitmentInfo" type="com.hjz.model.po.RecruitmentInfo">
+        <id column="recruitment_id" jdbcType="BIGINT" property="recruitmentId"></id>
+        <result column="company_id" jdbcType="BIGINT" property="companyId"/>
+        <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
+        <result column="job_name" jdbcType="VARCHAR" property="jobName"/>
+        <result column="salary" jdbcType="VARCHAR" property="salary"/>
+        <result column="requirement" jdbcType="VARCHAR" property="requirement"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="direction" jdbcType="VARCHAR" property="direction"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="responsibility" jdbcType="VARCHAR" property="responsibility"/>
+    </resultMap>
+    <insert id="save" parameterType="com.hjz.model.po.RecruitmentInfo">
+        INSERT INTO
+            recruitment_info(name,directionId,typeId,company,
+                             addressId,responsibility,requirement,createTime)
+        VALUES
+        (#{name},#{directionId},#{typeId},#{company},
+         #{addressId},#{responsibility},#{requirement},#{createTime})
+    </insert>
+
+    <delete id="deleteById" parameterType="Integer">
+        DELETE FROM
+            recruitment_info
+        WHERE
+            id = #{recruitmentInfoId}
+    </delete>
+
+    <update id="update" parameterType="com.hjz.model.po.RecruitmentInfo">
+        UPDATE
+            recruitment_info
+        SET
+            name = #{name}, directionId = #{directionId}, typeId = #{typeId}, company = #{company},
+            addressId = #{addressId}, responsibility = #{responsibility}, requirement = #{requirement}
+        WHERE
+            id = #{id}
+    </update>
+
+    <select id="listByQuery" parameterType="com.hjz.model.po.RecruitmentInfo">
+        SELECT
+        id,name,directionId,typeId,company,addressId,responsibility,requirement,createTime
+        FROM
+        recruitment_info
+        <where>
+            <if test="directionId != null">
+                directionId = #{directionId}
+            </if>
+            <if test="typeId !=null">
+                and typeId = #{typeId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,40 @@
+# tomcat
+server:
+  port: 8898
+  servlet:
+    context-path: /recruitment
+
+# spring
+spring:
+  # aop
+  aop.auto: true
+  # thymeleaf
+  thymeleaf:
+    cache: false
+  # session
+  session:
+    store-type: redis
+    timeout: 7200
+  # datasource
+  datasource:
+    # mysql
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/recruitment?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    username: root
+    password: root
+    # druid
+    type: com.alibaba.druid.pool.DruidDataSource
+    name: movieDataSource
+    druid:
+      # 连接池初始大小 最小 最大
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+      # 连接等待超时
+      maxWait: 60000
+      # 检测空闲连接的时间间隔
+      timeBetweenEvictionRunsMillis: 60000
+# mybatis
+mybatis:
+  type-aliases-package: com.hjz.model
+  mapperLocations: classpath:mapper/*.xml

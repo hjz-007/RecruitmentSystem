@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hjz.dao.CompanyMapper">
+    <resultMap id="Company" type="com.hjz.model.po.Company" >
+        <id column="company_id" jdbcType="BIGINT" property="companyId"></id>
+        <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
+        <result column="company_info" jdbcType="VARCHAR" property="companyInfo"/>
+        <result column="company_phone" jdbcType="VARCHAR" property="companyPhone"/>
+        <result column="company_email" jdbcType="VARCHAR" property="companyEmail"/>
+        <result column="company_password" jdbcType="VARCHAR" property="companyPassword"/>
+    </resultMap>
+
+    <select id="queryCompanyByName" parameterType="String" resultMap="Company">
+        select * from recruitment.company where company_email = #{email}
+    </select>
+
+    <insert id="register" parameterType="com.hjz.model.po.Company">
+        insert into recruitment.company(company_name,company_email,company_password) values (#{companyName},#{companyEmail},#{companyPassword});
+    </insert>
+
+    <update id="update" parameterType="com.hjz.model.po.Company">
+        update recruitment.company
+        set companyName = #{companyName},companyInfo = #{companyInfo},
+            companyPhone = #{companyPhone},companyPassword = #{companyPassword}
+    </update>
+
+    <delete id="delete" parameterType="String">
+        delete from recruitment.company
+        where companyEmail = #{companyEmail}
+    </delete>
+</mapper>
