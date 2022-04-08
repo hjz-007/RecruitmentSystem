@@ -2,8 +2,6 @@ package com.hjz.config;
 
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.apache.shiro.web.servlet.ShiroFilter;
-import org.mapstruct.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,12 +19,12 @@ public class ShiroConfig {
 
         Map<String, String> filterMap = new LinkedHashMap<>();
 
-        filterMap.put("/company/index","authc");
+        filterMap.put("/company/index","perms[company]");
         shiroFilterFactoryBean.setUnauthorizedUrl("/company/toLogin");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
 
         shiroFilterFactoryBean.setLoginUrl("/company/toLogin");
-
+        shiroFilterFactoryBean.setUnauthorizedUrl("/company/noauthorized");
        return shiroFilterFactoryBean;
     }
 

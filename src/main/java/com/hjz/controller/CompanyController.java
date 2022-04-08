@@ -10,6 +10,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/company")
@@ -63,5 +64,10 @@ public class CompanyController {
         return "/company/index";
     }
 
+    @RequestMapping("/noauthorized")
+    @ResponseBody
+    public String unauthorized(){
+        return "未经授权无法访问页面";
+    }
 }
 
