@@ -1,10 +1,10 @@
 package com.hjz.service;
 
-import com.hjz.model.dto.RecruitmentInfoAddDTO;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hjz.model.po.RecruitmentInfo;
+import com.hjz.model.query.RecruitmentInfoComQuery;
 import com.hjz.model.query.RecruitmentInfoQuery;
-
-import java.util.List;
+import com.hjz.model.query.RecruitmentRecommendQuery;
 
 public interface RecruitmentInfoService {
     void save(RecruitmentInfo recruitmentInfo);
@@ -13,7 +13,11 @@ public interface RecruitmentInfoService {
 
     void update(RecruitmentInfo recruitmentInfo);
 
-    List<RecruitmentInfo> listByQuery(RecruitmentInfoQuery recruitmentInfoQuery);
+    RecruitmentInfo detail(Integer recruitmentId);
 
-    List<RecruitmentInfo> list();
+    Page<RecruitmentInfo> pageByQuery(RecruitmentInfoQuery recruitmentInfoQuery);
+
+    Page<RecruitmentInfo> pageByCompanyId(RecruitmentInfoComQuery query);
+
+    Page<RecruitmentInfo> pageByResume(RecruitmentRecommendQuery query);
 }

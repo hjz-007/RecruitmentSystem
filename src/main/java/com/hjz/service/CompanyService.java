@@ -1,20 +1,18 @@
 package com.hjz.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.hjz.model.dto.CompanyRegisterDTO;
 import com.hjz.model.dto.UserLoginDTO;
-import com.hjz.model.dto.UserRegisterDTO;
 import com.hjz.model.po.Company;
-import org.springframework.stereotype.Service;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 
-public interface CompanyService {
+public interface CompanyService extends IService<Company> {
     // 企业登录
     void login(UserLoginDTO loginDTO, HttpServletRequest request);
 
     // 企业注册
-    void register(CompanyRegisterDTO registerDTO);
+    void register(CompanyRegisterDTO registerDTO) throws Exception;
 
     // 获取邮箱验证码
     void getEmailCaptcha(String email);

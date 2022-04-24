@@ -1,24 +1,20 @@
 package com.hjz.controller;
 
-import com.hjz.model.dto.RecruitmentInfoAddDTO;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hjz.model.po.ApiResult;
 import com.hjz.model.po.RecruitmentInfo;
+import com.hjz.model.query.RecruitmentInfoComQuery;
 import com.hjz.model.query.RecruitmentInfoQuery;
+import com.hjz.model.query.RecruitmentRecommendQuery;
 import com.hjz.service.RecruitmentInfoService;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/recruitmentInfo")
 public class RecruitmentInfoController {
 
-    private RecruitmentInfoService recruitmentInfoService;
+    private final RecruitmentInfoService recruitmentInfoService;
 
     @Autowired
     public RecruitmentInfoController(RecruitmentInfoService recruitmentInfoService) {
@@ -26,48 +22,40 @@ public class RecruitmentInfoController {
     }
 
     @PostMapping("/add")
-    public String add(@RequestBody RecruitmentInfo recruitmentInfo, Model model) {
+    public ApiResult<Void> add(@RequestBody RecruitmentInfo recruitmentInfo) {
         recruitmentInfoService.save(recruitmentInfo);
-        model.addAttribute("msg","插入成功");
-        return "/company/index";
+        return ApiResult.ok(null);
     }
 
     @PostMapping("/update")
-    public String update(@RequestBody RecruitmentInfo recruitmentInfo, Model model) {
+    public ApiResult<Void> update(@RequestBody RecruitmentInfo recruitmentInfo) {
         recruitmentInfoService.update(recruitmentInfo);
-        model.addAttribute("msg","修改成功");
-        return "/company/index";
+        return ApiResult.ok(null);
     }
 
-    @GetMapping("/delete/{recruitmentInfoId}")
-    public String deleteById(@PathVariable("recruitmentInfoId") Integer recruitmentInfoId, Model model) {
+    @DeleteMapping("/delete/{recruitmentInfoId}")
+    public ApiResult<Void> deleteById(@PathVariable("recruitmentInfoId") Integer recruitmentInfoId) {
         recruitmentInfoService.deleteById(recruitmentInfoId);
-        model.addAttribute("msg","删除成功");
-        return "/company/index";
+        return ApiResult.ok(null);
     }
 
-    @GetMapping("/query")
-    public ApiResult<List<RecruitmentInfo>> getByQuery(
-            @RequestParam("directionId") Integer directionId, @RequestParam("typeId") Integer typeId,
-            @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize) {
-        RecruitmentInfoQuery recruitmentInfoQuery = new RecruitmentInfoQuery();
-        ApiResult<List<RecruitmentInfo>> apiResult = new ApiResult<>();
-        // 页数和每页显示数量必填
-        if (pageNum == null || pageSize == null) {
-            apiResult.setStatus(404);
-            return apiResult;
-        }
-        recruitmentInfoQuery.setPageNum(pageNum);
-        recruitmentInfoQuery.setPageSize(pageSize);
-        if (directionId != null) {
-            recruitmentInfoQuery.setDirectionId(directionId);
-        }
-        if(typeId != null){
-            recruitmentInfoQuery.setTypeId(typeId);
-        }
-        List<RecruitmentInfo> recruitmentInfoList = recruitmentInfoService.
-                listByQuery(recruitmentInfoQuery);
-        apiResult.setData(recruitmentInfoList);
-        return apiResult;
+    @GetMapping("/detail/{recruitmentId}")
+    public ApiResult<RecruitmentInfo> detail(@PathVariable("recruitmentId") Integer recruitmentId){
+        return ApiResult.ok(recruitmentInfoService.detail(recruitmentId));
+    }
+
+    @PostMapping("/query")
+    public ApiResult<Page<RecruitmentInfo>> getByQuery(@RequestBody RecruitmentInfoQuery query) {
+        return ApiResult.ok(recruitmentInfoService.pageByQuery(query));
+    }
+
+    @PostMapping("/queryByCompanyId")
+    public ApiResult<Page<RecruitmentInfo>> queryByCompanyId(@RequestBody RecruitmentInfoComQuery query){
+        return ApiResult.ok(recruitmentInfoService.pageByCompanyId(query));
+    }
+
+    @PostMapping("/recommend")
+    public ApiResult<Page<RecruitmentInfo>> recommend(@RequestBody RecruitmentRecommendQuery query){
+        return ApiResult.ok(recruitmentInfoService.pageByResume(query));
     }
 }

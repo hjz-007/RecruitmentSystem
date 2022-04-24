@@ -1,5 +1,7 @@
 package com.hjz.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hjz.dao.CompanyMapper;
 import com.hjz.model.dto.CompanyRegisterDTO;
 import com.hjz.model.dto.UserLoginDTO;
@@ -12,9 +14,12 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 
 @Service
-public class CompanyServiceImpl implements CompanyService {
+public class CompanyServiceImpl extends ServiceImpl<CompanyMapper,Company> implements CompanyService {
+    private final CompanyMapper companyMapper;
     @Autowired
-    CompanyMapper companyMapper;
+    public CompanyServiceImpl(CompanyMapper companyMapper) {
+        this.companyMapper = companyMapper;
+    }
 
     @Override
     public void login(UserLoginDTO loginDTO, HttpServletRequest request) {
@@ -22,7 +27,13 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void register(CompanyRegisterDTO registerDTO) {
+    public void register(CompanyRegisterDTO registerDTO) throws Exception {
+        QueryWrapper<Company> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(Company::getCompanyEmail, registerDTO.getCompanyEmail());
+        Company result = companyMapper.selectOne(queryWrapper);
+        if(result != null) {
+            throw new Exception("该邮箱已被注册");
+        }
         Company company = new Company();
         BeanUtils.copyProperties(registerDTO, company);
         companyMapper.insert(company);
@@ -40,6 +51,8 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public Company queryCompanyByEmail(String email) {
-        return companyMapper.queryCompanyByEmail(email);
+        QueryWrapper<Company> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(Company::getCompanyEmail, email);
+        return companyMapper.selectOne(queryWrapper);
     }
 }

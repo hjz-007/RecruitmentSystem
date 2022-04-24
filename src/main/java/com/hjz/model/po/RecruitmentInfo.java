@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  * @description: 招聘信息模型
  *
@@ -36,7 +38,15 @@ public class RecruitmentInfo {
 
     // 月薪
     @TableField(value = "salary")
-    private String salary;
+    private Integer salary;
+
+    // 工作类型
+    @TableField(value = "type")
+    private String type;
+
+    // 学历要求
+    @TableField(value = "education")
+    private String education;
 
     // 职位要求
     @TableField(value = "requirement")
@@ -46,19 +56,19 @@ public class RecruitmentInfo {
     @TableField(value = "address")
     private String address;
 
-    // 方向
-    @TableField(value = "direction")
-    private String direction;
+    // 是否启用
+    @TableField(value = "is_enable")
+    private boolean enable;
 
-    // 类别
-    @TableField(value = "type")
-    private String type;
+    // 职位介绍
+    @TableField(value = "introduction")
+    private String introduction;
 
     // 职责
     @TableField(value = "responsibility")
     private String responsibility;
 
     // 创建时间
-//    @TableField(value = "")
-//    private Long createTime;
+    @TableField(value = "create_time")
+    private Date createTime;
 }

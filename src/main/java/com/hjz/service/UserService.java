@@ -2,8 +2,8 @@ package com.hjz.service;
 
 import com.hjz.model.dto.UserLoginDTO;
 import com.hjz.model.dto.UserRegisterDTO;
+import com.hjz.model.po.User;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -15,16 +15,12 @@ public interface UserService {
     void login(UserLoginDTO loginDTO, HttpServletRequest request);
 
     // 用户注册
-    void register(UserRegisterDTO registerDTO);
+    void register(UserRegisterDTO registerDTO) throws Exception;
 
-    // 获取邮箱验证码
-    void getEmailCaptcha(String email);
+    void update(User user);
 
     // 用户注销
     void logout(HttpServletRequest request);
-
-    // 获取验证码
-    void getCaptcha(String ip, ServletOutputStream outputStream);
 
     //删除用户
     void deleteUser(int id);

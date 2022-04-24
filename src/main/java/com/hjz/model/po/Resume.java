@@ -45,9 +45,13 @@ public class Resume {
     @TableField(value = "education")
     private String education;
 
-    // 户口所在地
-    @TableField(value = "hometown")
-    private String hometown;
+    // 目标岗位类型
+    @TableField(value = "type")
+    private String type;
+
+    // 教育经历
+    @TableField(value = "edu_experience")
+    private String eduExperience;
 
     // 手机号码
     @TableField(value = "user_phone")
@@ -68,4 +72,8 @@ public class Resume {
     // 获奖经历
     @TableField(value = "award")
     private String award;
+
+    // 是否展示给企业
+    @TableField(value = "enable")
+    private boolean enable;
 }

@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  * @description: 投递状态
  * */
@@ -17,13 +19,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @TableName("delivery")
 public class Delivery {
-    // 简历
-    @TableId(value = "resume_id",type = IdType.AUTO)
+    // 投递id
+    @TableId(value = "delivery_id",type = IdType.AUTO)
+    private int deliveryId;
+
+    // 简历id
+    @TableField(value = "resume_id")
     private int resumeId;
 
-    // 用户id
-    @TableField(value = "resume_id")
-    private int userId;
+    // 企业id
+    @TableField(value = "company_id")
+    private int companyId;
 
     // 岗位id
     @TableField(value = "recruitment_id")
@@ -35,5 +41,5 @@ public class Delivery {
 
     // 投递时间
     @TableField(value = "create_time")
-    private Long createTime;
+    private Date createTime;
 }

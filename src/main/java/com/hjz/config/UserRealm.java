@@ -17,8 +17,8 @@ public class UserRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         System.out.println("执行了授权");
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        info.addStringPermission("user:add");
-        return null;
+        info.addStringPermission("company");
+        return info;
     }
 
     //认证

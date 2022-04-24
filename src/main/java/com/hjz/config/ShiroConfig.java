@@ -19,12 +19,12 @@ public class ShiroConfig {
 
         Map<String, String> filterMap = new LinkedHashMap<>();
 
-        filterMap.put("/company/index","perms[company]");
-        shiroFilterFactoryBean.setUnauthorizedUrl("/company/toLogin");
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
+        //filterMap.put("/company/index","perms[company]");
+        //shiroFilterFactoryBean.setUnauthorizedUrl("/company/toLogin");
+        //shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
 
-        shiroFilterFactoryBean.setLoginUrl("/company/toLogin");
-        shiroFilterFactoryBean.setUnauthorizedUrl("/company/noauthorized");
+        //shiroFilterFactoryBean.setLoginUrl("/company/toLogin");
+        //shiroFilterFactoryBean.setUnauthorizedUrl("/company/noauthorized");
        return shiroFilterFactoryBean;
     }
 

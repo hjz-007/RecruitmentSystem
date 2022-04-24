@@ -28,6 +28,14 @@ public class Company {
     @TableField(value = "company_info")
     private String companyInfo;
 
+    // 地址
+    @TableField(value = "address")
+    private String address;
+
+    // 企业成就
+    @TableField(value = "achievement")
+    private String achievement;
+
     // 企业电话
     @TableField(value = "company_phone")
     private String companyPhone;

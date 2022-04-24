@@ -1,52 +1,56 @@
 package com.hjz.controller;
 
 import com.hjz.model.dto.CompanyRegisterDTO;
+import com.hjz.model.po.ApiResult;
+import com.hjz.model.po.Company;
 import com.hjz.service.CompanyService;
+import com.hjz.service.DeliveryService;
+import com.hjz.service.RecruitmentInfoService;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import javax.validation.Valid;
+
+@RestController
 @RequestMapping("/company")
 public class CompanyController {
-    CompanyService companyService;
+    private final CompanyService companyService;
+    private final RecruitmentInfoService recruitmentInfoService;
+    private final DeliveryService deliveryService;
 
-    @RequestMapping("/toLogin")
-    public String toLogin(){
-        return "/company/login";
+    @Autowired
+    public CompanyController(CompanyService companyService, RecruitmentInfoService recruitmentInfoService, DeliveryService deliveryService) {
+        this.companyService = companyService;
+        this.recruitmentInfoService = recruitmentInfoService;
+        this.deliveryService = deliveryService;
     }
 
-
-    @RequestMapping("/index")
-    public String toIndex(Model model){
-        model.addAttribute("hello company");
-        return "/company/index";
-    }
-
-    @RequestMapping("/toRegister")
-    public String toRegister(){
-        return "/company/register";
-    }
-
-    @RequestMapping("/register")
-    public String register(CompanyRegisterDTO companyRegisterDTO, Model model){
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "成功！"),
+            @ApiResponse(code = 130, message = "用户名已经存在"),
+            @ApiResponse(code = 230, message = "邮箱已经存在"),
+            @ApiResponse(code = 231, message = "邮箱验证码错误"),
+            @ApiResponse(code = 232, message = "邮箱验证码无效")
+    })
+    @PostMapping("/register")
+    public ApiResult<Void> register(@RequestBody @Valid CompanyRegisterDTO companyRegisterDTO){
         try {
             companyService.register(companyRegisterDTO);
         } catch (Exception e){
-            model.addAttribute("msg", "注册信息错误");
+            return ApiResult.failed(230, "邮箱已存在");
         }
-        model.addAttribute("msg", "注册成功");
-        return "/company/login";
+        return ApiResult.ok(null);
     }
 
-    @RequestMapping("/login")
-    public String login(String username, String password, Model model){
+    @PostMapping("/login")
+    public ApiResult<Void> login(String username, String password){
         // 获取当前用户
         Subject subject = SecurityUtils.getSubject();
         // 封装用户的登录数据
@@ -55,19 +59,28 @@ public class CompanyController {
             // 执行登录方法，无异常即可
             subject.login(token);
         } catch (UnknownAccountException e){
-            model.addAttribute("msg", "用户名错误");
-            return "/company/login";
+            return ApiResult.failed(401,"用户名错误");
         } catch (IncorrectCredentialsException e) {
-            model.addAttribute("msg","密码错误");
-            return "/company/login";
+            return ApiResult.failed(401,"密码错误");
         }
-        return "/company/index";
+        return ApiResult.ok(null);
+    }
+
+    @GetMapping("/detail/{email}")
+    public ApiResult<Company> detail(@PathVariable("email") String email){
+        return ApiResult.ok(companyService.queryCompanyByEmail(email));
+    }
+
+    @PutMapping("/update")
+    public ApiResult<Boolean> update(@RequestBody Company company){
+        return ApiResult.ok(companyService.updateById(company));
     }
 
     @RequestMapping("/noauthorized")
     @ResponseBody
-    public String unauthorized(){
-        return "未经授权无法访问页面";
+    public ApiResult<Void> unauthorized(){
+        return ApiResult.failed(401, "未经授权无法访问页面");
     }
+
 }
 

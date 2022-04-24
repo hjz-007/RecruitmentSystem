@@ -9,19 +9,39 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class RecruitmentInfoQuery implements Serializable {
 
-    // 方向
-    private Integer directionId;
+    /**
+     * 查找信息——公司名或者职位名
+     */
+    private String jobName;
 
-    // 类别
-    private Integer typeId;
+    /**
+     * 职位类型
+     */
+    private String type;
 
-    // 最低薪资
+    /**
+     * 最低薪资
+     */
     private Integer minSalary;
 
-    // 页数
+    /**
+     * 最高薪资
+     */
+    private Integer maxSalary;
+
+    /**
+     * 所在城市
+     */
+    private String  city;
+
+    /**
+     * 页数
+     */
     private Integer pageNum;
 
-    // 每页显示数量
+    /**
+     * 页大小
+     */
     private Integer pageSize;
 
 
