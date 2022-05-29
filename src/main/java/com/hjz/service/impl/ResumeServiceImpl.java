@@ -12,6 +12,7 @@ import com.hjz.service.ResumeService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,11 +56,19 @@ public class ResumeServiceImpl implements ResumeService {
     @Override
     public Page<Resume> pageByQuery(ResumeInfoQuery query){
         QueryWrapper<Resume> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(Resume::isEnable, true)
-                .eq(Resume::getUserSex, query.getUserSex())
-                .eq(Resume::getUserAge, query.getUserAge())
-                .eq(Resume::getNation, query.getNation())
-                .eq(Resume::getEducation, query.getEducation());
+        queryWrapper.lambda().eq(Resume::isEnable, true);
+        if(Objects.nonNull(query.getUserSex()) && !query.getUserSex().equals("")){
+            queryWrapper.lambda().eq(Resume::getUserSex, query.getUserSex());
+        }
+        if(Objects.nonNull(query.getUserAge())){
+            queryWrapper.lambda().eq(Resume::getUserAge, query.getUserAge());
+        }
+        if(Objects.nonNull(query.getNation()) && !query.getNation().equals("")){
+            queryWrapper.lambda().eq(Resume::getNation, query.getNation());
+        }
+        if(Objects.nonNull(query.getEducation()) && !query.getEducation().equals("")){
+            queryWrapper.lambda().eq(Resume::getEducation, query.getEducation());
+        }
         Page<Resume> page = new Page<>(query.getPageNum(), query.getPageSize());
         return resumeMapper.selectPage(page, queryWrapper);
     }

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Objects;
 
 @Service
 public class RecruitmentInfoServiceImpl implements RecruitmentInfoService {
@@ -61,16 +62,20 @@ public class RecruitmentInfoServiceImpl implements RecruitmentInfoService {
         QueryWrapper<RecruitmentInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
                 .eq(RecruitmentInfo::isEnable, true)
-                .ge(RecruitmentInfo::getSalary, query.getMinSalary())
-                .le(RecruitmentInfo::getSalary, query.getMaxSalary())
                 .orderByAsc(RecruitmentInfo::getCreateTime);
-        if(!query.getType().equals("")){
+        if(Objects.nonNull(query.getMinSalary())){
+            queryWrapper.lambda().ge(RecruitmentInfo::getSalary, query.getMinSalary());
+        }
+        if (Objects.nonNull(query.getMaxSalary())) {
+            queryWrapper.lambda().le(RecruitmentInfo::getSalary, query.getMaxSalary());
+        }
+        if(Objects.nonNull(query.getType()) && !query.getType().equals("")){
             queryWrapper.lambda().like(RecruitmentInfo::getType, query.getType());
         }
-        if(!query.getJobName().equals("")){
+        if(Objects.nonNull(query.getJobName()) && !query.getJobName().equals("")){
             queryWrapper.lambda().like(RecruitmentInfo::getJobName, query.getJobName());
         }
-        if(!query.getCity().equals("")){
+        if(Objects.nonNull(query.getCity()) && !query.getCity().equals("")){
             queryWrapper.lambda().like(RecruitmentInfo::getAddress, query.getCity());
         }
         Page<RecruitmentInfo> page = new Page<>(query.getPageNum(), query.getPageSize());
