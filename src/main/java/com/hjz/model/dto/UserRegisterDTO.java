@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 /**
@@ -24,10 +25,12 @@ public class UserRegisterDTO {
 
     @ApiModelProperty(required = true, value = "邮箱", example = "603773962@qq.com")
     @Email
+    @NotNull
     private String userEmail;
 
     // 6-12位,大小写字母及数字组合
     @ApiModelProperty(required = true, value = "密码", example = "123456")
     @Pattern(regexp = "^[a-zA-Z0-9]{6,12}$")
+    @NotNull
     private String userPassword;
 }

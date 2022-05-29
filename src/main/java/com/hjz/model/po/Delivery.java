@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -18,7 +19,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("delivery")
-public class Delivery {
+public class Delivery implements Serializable {
     // 投递id
     @TableId(value = "delivery_id",type = IdType.AUTO)
     private int deliveryId;

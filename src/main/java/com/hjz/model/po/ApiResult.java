@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * @description: 通用API响应实体
  * @author: hlx 2018-08-14
@@ -14,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(description = "通用API响应体")
-public class ApiResult<T> {
+public class ApiResult<T> implements Serializable {
 
     @ApiModelProperty(value = "响应码即code", example = "400")
     private int code;

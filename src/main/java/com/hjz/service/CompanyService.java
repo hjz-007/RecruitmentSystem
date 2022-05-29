@@ -14,12 +14,9 @@ public interface CompanyService extends IService<Company> {
     // 企业注册
     void register(CompanyRegisterDTO registerDTO) throws Exception;
 
-    // 获取邮箱验证码
-    void getEmailCaptcha(String email);
-
-    // 企业注销
-    void logout(HttpServletRequest request);
-
-    // 获取企业用户
+    // 根据邮箱获取企业
     Company queryCompanyByEmail(String email);
+
+    // 根据id获取企业
+    Company queryCompanyById(int Id);
 }

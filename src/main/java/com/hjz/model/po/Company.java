@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * @description: 公司实体
  * */
@@ -15,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("company")
-public class Company {
+public class Company implements Serializable {
     // 编号
     @TableId(value = "company_id", type = IdType.AUTO)
     private Integer companyId;

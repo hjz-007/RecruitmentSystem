@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.Valid;
+import java.io.Serializable;
 
 /**
  * @description: 用户实体
@@ -18,7 +18,7 @@ import javax.validation.Valid;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("user")
-public class User {
+public class User implements Serializable {
     // 编号
     @TableId(value = "user_id", type = IdType.AUTO)
     private int userId;

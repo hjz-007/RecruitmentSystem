@@ -1,36 +1,28 @@
 package com.hjz.controller;
 
+import com.hjz.model.dto.CompanyLoginDTO;
 import com.hjz.model.dto.CompanyRegisterDTO;
 import com.hjz.model.po.ApiResult;
 import com.hjz.model.po.Company;
+import com.hjz.model.vo.CompanyVo;
 import com.hjz.service.CompanyService;
-import com.hjz.service.DeliveryService;
-import com.hjz.service.RecruitmentInfoService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.AllArgsConstructor;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/company")
 public class CompanyController {
     private final CompanyService companyService;
-    private final RecruitmentInfoService recruitmentInfoService;
-    private final DeliveryService deliveryService;
-
-    @Autowired
-    public CompanyController(CompanyService companyService, RecruitmentInfoService recruitmentInfoService, DeliveryService deliveryService) {
-        this.companyService = companyService;
-        this.recruitmentInfoService = recruitmentInfoService;
-        this.deliveryService = deliveryService;
-    }
 
     @ApiResponses({
             @ApiResponse(code = 200, message = "成功！"),
@@ -50,20 +42,23 @@ public class CompanyController {
     }
 
     @PostMapping("/login")
-    public ApiResult<Void> login(String username, String password){
+    public ApiResult<CompanyVo> login(@RequestBody @Valid CompanyLoginDTO loginDTO){
         // 获取当前用户
         Subject subject = SecurityUtils.getSubject();
         // 封装用户的登录数据
-        UsernamePasswordToken token = new UsernamePasswordToken(username,password);
+        UsernamePasswordToken token = new UsernamePasswordToken(loginDTO.getCompanyEmail(), loginDTO.getCompanyPassword());
+        CompanyVo companyVo = new CompanyVo();
         try {
             // 执行登录方法，无异常即可
             subject.login(token);
+            Company company = companyService.queryCompanyByEmail(loginDTO.getCompanyEmail());
+            companyVo.setCompanyId(company.getCompanyId());
         } catch (UnknownAccountException e){
             return ApiResult.failed(401,"用户名错误");
         } catch (IncorrectCredentialsException e) {
             return ApiResult.failed(401,"密码错误");
         }
-        return ApiResult.ok(null);
+        return ApiResult.ok(companyVo);
     }
 
     @GetMapping("/detail/{email}")
@@ -76,10 +71,9 @@ public class CompanyController {
         return ApiResult.ok(companyService.updateById(company));
     }
 
-    @RequestMapping("/noauthorized")
-    @ResponseBody
-    public ApiResult<Void> unauthorized(){
-        return ApiResult.failed(401, "未经授权无法访问页面");
+    @GetMapping("/detailById/{companyId}")
+    public ApiResult<Company> detailById(@PathVariable("companyId") int companyId){
+        return ApiResult.ok(companyService.queryCompanyById(companyId));
     }
 
 }

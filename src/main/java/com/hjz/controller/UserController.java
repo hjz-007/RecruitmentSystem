@@ -4,12 +4,21 @@ package com.hjz.controller;
 import com.hjz.model.dto.UserLoginDTO;
 import com.hjz.model.dto.UserRegisterDTO;
 import com.hjz.model.po.ApiResult;
+import com.hjz.model.po.Resume;
+import com.hjz.model.po.User;
+import com.hjz.model.vo.UserVo;
+import com.hjz.service.ResumeService;
 import com.hjz.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,21 +28,37 @@ import javax.validation.Valid;
 @Slf4j
 @Validated
 @RestController
+@AllArgsConstructor
 @RequestMapping("/user")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
+    private final ResumeService resumeService;
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService=userService;
-    }
     //用户登录
     @ApiOperation(value = "用户登录")
     @PostMapping("/login")
-    public ApiResult<Void> login(@RequestBody UserLoginDTO loginDTO, HttpServletRequest request) {
-        userService.login(loginDTO,request);
-        return ApiResult.ok(null);
+    public ApiResult<UserVo> login(@RequestBody @Valid UserLoginDTO loginDTO, HttpServletRequest request) {
+        // 获取当前用户
+        Subject subject = SecurityUtils.getSubject();
+        // 封装用户的登录数据
+        UsernamePasswordToken token = new UsernamePasswordToken(loginDTO.getUserEmail(), loginDTO.getUserPassword());
+        UserVo userVo = new UserVo();
+        try {
+            // 执行登录方法，无异常即可
+            subject.login(token);
+            User user = userService.getByEmail(loginDTO.getUserEmail());
+            Resume resume = resumeService.getOneByUserId(user.getUserId());
+            userVo.setUserId(user.getUserId());
+            if(resume != null){
+                userVo.setResumeId(resume.getResumeId());
+            }
+        } catch (UnknownAccountException e){
+            return ApiResult.failed(401,"用户名错误");
+        } catch (IncorrectCredentialsException e) {
+            return ApiResult.failed(401,"密码错误");
+        }
+        return ApiResult.ok(userVo);
     }
 
     //用户注册

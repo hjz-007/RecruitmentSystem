@@ -1,5 +1,6 @@
 package com.hjz.config;
 
+import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.annotation.Bean;
@@ -19,12 +20,15 @@ public class ShiroConfig {
 
         Map<String, String> filterMap = new LinkedHashMap<>();
 
-        //filterMap.put("/company/index","perms[company]");
-        //shiroFilterFactoryBean.setUnauthorizedUrl("/company/toLogin");
-        //shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
+        filterMap.put("/user/login", "anon");
+        filterMap.put("/user/register", "anon");
+        filterMap.put("/company/login", "anon");
+        filterMap.put("/company/register", "anon");
+        filterMap.put("/**", "authc");
 
-        //shiroFilterFactoryBean.setLoginUrl("/company/toLogin");
-        //shiroFilterFactoryBean.setUnauthorizedUrl("/company/noauthorized");
+        filterMap.put("/**","perms[user]");
+
+        //shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
        return shiroFilterFactoryBean;
     }
 
@@ -32,14 +36,26 @@ public class ShiroConfig {
     @Bean(name = "defaultWebSecurityManager")
     public DefaultWebSecurityManager getDefaultWebSecurityManager(UserRealm userRealm){
         DefaultWebSecurityManager defaultWebSecurityManager = new DefaultWebSecurityManager();
+//        List<Realm> list = new ArrayList<>();
+//        list.add(userRealm);
+//        list.add(companyRealm());
+//        defaultWebSecurityManager.setRealms(list);
         defaultWebSecurityManager.setRealm(userRealm);
+//        defaultWebSecurityManager.setSessionManager(sessionManager());
         return defaultWebSecurityManager;
     }
 
+    @Bean
+    public SessionManager sessionManager(){
+        return new TokenSessionManager();
+    }
 
     //创建realm对象，自定义类
     @Bean(name = "userRealm")
     public UserRealm userRealm(){
         return new UserRealm();
     }
+
+    @Bean(name = "companyRealm")
+    public CompanyRealm companyRealm() {return new CompanyRealm();}
 }

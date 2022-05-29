@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * @description：简历
  * */
@@ -16,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("resume")
-public class Resume {
+public class Resume implements Serializable {
     // 简历编号
     @TableId(value = "resume_id", type = IdType.AUTO)
     private int resumeId;

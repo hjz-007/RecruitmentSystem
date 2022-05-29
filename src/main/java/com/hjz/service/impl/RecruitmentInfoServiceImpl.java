@@ -94,7 +94,8 @@ public class RecruitmentInfoServiceImpl implements RecruitmentInfoService {
             Page<RecruitmentInfo> page = new Page<>(query.getPageNum(), query.getPageSize());
             return recruitmentInfoMapper.selectPage(page, queryWrapper);
         } else {
-            return null;
+            Page<RecruitmentInfo> page = new Page<>(query.getPageNum(), query.getPageSize());
+           return recruitmentInfoMapper.selectPage(page, new QueryWrapper<RecruitmentInfo>());
         }
     }
 

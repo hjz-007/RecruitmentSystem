@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface UserService {
     // 用户登录
-    void login(UserLoginDTO loginDTO, HttpServletRequest request);
+    String login(UserLoginDTO loginDTO, HttpServletRequest request);
 
     // 用户注册
     void register(UserRegisterDTO registerDTO) throws Exception;
@@ -24,4 +24,6 @@ public interface UserService {
 
     //删除用户
     void deleteUser(int id);
+
+    User getByEmail(String Email);
 }

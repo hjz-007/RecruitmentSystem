@@ -39,20 +39,16 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper,Company> imple
         companyMapper.insert(company);
     }
 
-    @Override
-    public void getEmailCaptcha(String email) {
-
-    }
-
-    @Override
-    public void logout(HttpServletRequest request) {
-
-    }
 
     @Override
     public Company queryCompanyByEmail(String email) {
         QueryWrapper<Company> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(Company::getCompanyEmail, email);
         return companyMapper.selectOne(queryWrapper);
+    }
+
+    @Override
+    public Company queryCompanyById(int id) {
+        return companyMapper.selectById(id);
     }
 }

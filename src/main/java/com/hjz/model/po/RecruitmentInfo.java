@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -19,7 +20,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("recruitment_info")
-public class RecruitmentInfo {
+public class RecruitmentInfo implements Serializable {
     // 招聘编号
     @TableId(value = "recruitment_id", type = IdType.AUTO)
     private int recruitmentId;
