@@ -10,6 +10,7 @@ import com.hjz.service.CompanyService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,7 +26,7 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper,Company> imple
     public void login(UserLoginDTO loginDTO, HttpServletRequest request) {
 
     }
-
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void register(CompanyRegisterDTO registerDTO) throws Exception {
         QueryWrapper<Company> queryWrapper = new QueryWrapper<>();

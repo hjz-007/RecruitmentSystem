@@ -12,6 +12,8 @@ public interface ResumeService {
 
     void updateById(Resume resume);
 
+    Resume detailById(Integer resumeId);
+
     Resume getOneByUserId(Integer userId);
 
     Page<Resume> pageByQuery(ResumeInfoQuery query);

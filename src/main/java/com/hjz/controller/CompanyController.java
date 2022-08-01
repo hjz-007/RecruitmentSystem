@@ -54,7 +54,7 @@ public class CompanyController {
             Company company = companyService.queryCompanyByEmail(loginDTO.getCompanyEmail());
             companyVo.setCompanyId(company.getCompanyId());
         } catch (UnknownAccountException e){
-            return ApiResult.failed(401,"用户名错误");
+            return ApiResult.failed(401,"账号错误");
         } catch (IncorrectCredentialsException e) {
             return ApiResult.failed(401,"密码错误");
         }

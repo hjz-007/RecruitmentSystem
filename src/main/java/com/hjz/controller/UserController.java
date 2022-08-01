@@ -81,14 +81,6 @@ public class UserController {
         return ApiResult.ok(null);
     }
 
-    //注销
-    @ApiOperation(value = "注销")
-    @GetMapping("/logout")
-    public ApiResult<String> logout(HttpServletRequest request) {
-        userService.logout(request);
-        return ApiResult.ok(null);
-    }
-
     @DeleteMapping("/deleteUser/{userId}")
     public ApiResult<Void> deleteUser(@PathVariable("userId") int userId){
             System.out.println(userId);

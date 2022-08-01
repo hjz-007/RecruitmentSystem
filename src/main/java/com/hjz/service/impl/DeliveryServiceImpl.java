@@ -17,6 +17,7 @@ import com.hjz.service.DeliveryService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         this.resumeMapper = resumeMapper;
         this.recruitmentInfoMapper = recruitmentInfoMapper;
     }
-
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public String add(Delivery delivery) {
         QueryWrapper<Delivery> queryWrapper = new QueryWrapper<>();
@@ -46,6 +47,11 @@ public class DeliveryServiceImpl implements DeliveryService {
         if(result != null){
             return "已经投递过该岗位";
         }
+        RecruitmentInfo recruitmentInfo = recruitmentInfoMapper.selectById(delivery.getRecruitmentId());
+        if(recruitmentInfo == null) {
+            return "没有该岗位";
+        }
+        delivery.setCompanyId(recruitmentInfo.getCompanyId());
         delivery.setCreateTime(new Date());
         deliveryMapper.insert(delivery);
         return "";
@@ -55,7 +61,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     public void deleteById(Integer deliveryId) {
         deliveryMapper.deleteById(deliveryId);
     }
-
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateById(Delivery delivery) {
         QueryWrapper<Delivery> queryWrapper = new QueryWrapper<>();

@@ -9,7 +9,9 @@ import com.hjz.model.po.Resume;
 import com.hjz.model.query.ResumeInfoQuery;
 import com.hjz.model.query.ResumeRecommendQuery;
 import com.hjz.service.ResumeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -20,11 +22,12 @@ public class ResumeServiceImpl implements ResumeService {
     private final ResumeMapper resumeMapper;
     private final RecruitmentInfoMapper recruitmentInfoMapper;
 
+    @Autowired
     public ResumeServiceImpl(ResumeMapper resumeMapper, RecruitmentInfoMapper recruitmentInfoMapper) {
         this.resumeMapper = resumeMapper;
         this.recruitmentInfoMapper = recruitmentInfoMapper;
     }
-
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void add(Resume resume) {
         resumeMapper.insert(resume);
@@ -34,7 +37,7 @@ public class ResumeServiceImpl implements ResumeService {
     public void deleteById(Integer resumeId) {
         resumeMapper.deleteById(resumeId);
     }
-
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateById(Resume resume) {
         QueryWrapper<Resume> queryWrapper = new QueryWrapper<>();
@@ -45,6 +48,11 @@ public class ResumeServiceImpl implements ResumeService {
         }else{
             resumeMapper.updateById(resume);
         }
+    }
+
+    @Override
+    public Resume detailById(Integer resumeId) {
+        return resumeMapper.selectById(resumeId);
     }
 
     @Override

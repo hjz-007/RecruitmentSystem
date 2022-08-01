@@ -49,8 +49,13 @@ public class ResumeController {
      * @return
      */
     @GetMapping("/detail/{userId}")
-    public ApiResult<Resume> detailById(@PathVariable("userId") int userId){
+    public ApiResult<Resume> detailByUserId(@PathVariable("userId") int userId){
         return ApiResult.ok(resumeService.getOneByUserId(userId));
+    }
+
+    @GetMapping("/detailById/{resumeId}")
+    public ApiResult<Resume> detailByResumeId(@PathVariable("resumeId") int resumeId){
+        return ApiResult.ok(resumeService.detailById(resumeId));
     }
 
     /**

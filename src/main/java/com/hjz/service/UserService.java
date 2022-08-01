@@ -19,9 +19,6 @@ public interface UserService {
 
     void update(User user);
 
-    // 用户注销
-    void logout(HttpServletRequest request);
-
     //删除用户
     void deleteUser(int id);
 
